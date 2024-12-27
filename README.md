@@ -1,4 +1,29 @@
-# Plagiarism-Checker
+<h1 align="center">Plagiarism Checker</h1>
+
+![PlagiarismChecker](image.png)
+## Table of Contents
+- [Description](#description)
+- [Tech Stack](#tech-stack)
+- [Structure](#structure)
+- [Getting Started](#getting-started)
+
+## Description
+Plagiarism Checker is a powerful tool designed to detect plagiarism by comparing two documents using the **Cosine Similarity** algorithm. Users can upload a reference document and a test document, both in **PDF** format, and the tool will calculate the similarity score between them. The result includes a detailed plagiarism level, providing insights into how much of the content overlaps. This tool is ideal for students, researchers, and professionals who need to ensure the originality of their work.
+
+## Tech Stack
+- **Frontend**: Built with **Vite**, **React**, and **Tailwind CSS** for a fast, responsive, and modern user interface.
+- **Backend**: Powered by **Flask (Python)**, utilizing Cosine Similarity for plagiarism detection.
+
+## Structure
+```
+├── src/
+│   ├── client
+│   └── server
+├── test/
+|   ├── referensi
+|   └── uji
+└── README.md
+```
 
 ## Getting Started
 1. **Clone this repository:**
