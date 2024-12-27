@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 
 src/server/venv
+src/server/__pycache__
