@@ -214,11 +214,11 @@ function App(): JSX.Element {
                   </span>
                 </div>
                 <div className="flex justify-between items-center border-b pb-2">
-                  <span className="font-medium">Test File:</span>
+                  <span className="font-medium">Test Document:</span>
                   <span className="text-gray-600">{checkResult.test_file}</span>
                 </div>
                 <div className="flex justify-between items-center pb-2">
-                  <span className="font-medium">Reference File:</span>
+                  <span className="font-medium">Reference Document:</span>
                   <span className="text-gray-600">
                     {checkResult.reference_file}
                   </span>
