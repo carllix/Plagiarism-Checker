@@ -114,8 +114,8 @@ function App(): JSX.Element {
       {/* Header */}
       <header className="text-center mb-8">
         <h1 className="text-4xl font-bold text-zinc-900">Plagiarism Checker</h1>
-        <p className="mt-6 text-lg text-zinc-900">
-          Alert! Plagiarism Check – Keep It Clean, Keep It Yours!
+        <p className="mt-6 text-2xl text-white bg-red-600 py-3 px-6 rounded-lg font-semibold">
+          Detect Plagiarism, Preserve Originality
         </p>
       </header>
 
@@ -195,9 +195,11 @@ function App(): JSX.Element {
               <div className="space-y-4">
                 <div className="flex justify-between items-center border-b pb-2">
                   <span className="font-medium">Similarity Score:</span>
-                  <span className={`font-bold ${getPlagiarismColor(
+                  <span
+                    className={`font-bold ${getPlagiarismColor(
                       checkResult.plagiarism_level
-                    )}`}>
+                    )}`}
+                  >
                     {formatSimilarity(checkResult.similarity)}
                   </span>
                 </div>
