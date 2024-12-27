@@ -1,6 +1,5 @@
 import PyPDF2
 import numpy as np
-import os
 import re
 
 
@@ -105,100 +104,53 @@ def cosine_similarity(vector1, vector2):
         return 0
 
     similarity = dot_product / (magnitude1 * magnitude2)
-    return similarity
+    return float(similarity)  # Convert numpy float to Python float
 
 
-def check_plagiarism(file1_path, file2_path, show_details=True):
+def get_plagiarism_level(similarity):
+    """
+    Menentukan level plagiarisme berdasarkan nilai similarity
+    Parameter:
+        similarity (float): Nilai similarity
+    Return:
+        str: Level plagiarisme
+    """
+    if similarity > 0.70:
+        return "Plagiarisme Berat"
+    elif 0.30 <= similarity <= 0.70:
+        return "Plagiarisme Sedang"
+    elif 0 < similarity < 0.30:
+        return "Plagiarisme Ringan"
+    else:
+        return "Tidak Plagiarisme" 
+
+
+def check_plagiarism(file1_path, file2_path):
     """
     Fungsi untuk memeriksa plagiarisme antara dua file PDF
     Parameters:
         file1_path (str): Path ke file PDF pertama
         file2_path (str): Path ke file PDF kedua
-        show_details (bool): Menampilkan detail perhitungan
     Return:
-        float: Nilai similarity atau None jika terjadi error
+        dict: Hasil pengecekan plagiarisme
     """
     # Mengekstrak teks dari kedua file
     text1 = extract_text_from_pdf(file1_path)
     text2 = extract_text_from_pdf(file2_path)
 
     if not text1 or not text2:
-        return None
+        return {
+            "error": "Extraction error",
+            "message": "Error extracting text from PDF files",
+        }
 
     # Mendapatkan kata unik dan vektor
     unique_words, vector1, vector2 = get_unique_words_and_vectors(text1, text2)
 
-    # Menampilkan detail perhitungan jika diminta
-    if show_details:
-        print("\nDetail Perhitungan:")
-        print("\nTeks setelah dibersihkan:")
-        print("Dokumen Uji:", clean_text(text1))
-        print("Dokumen Refensi:", clean_text(text2))
-
-        print("\nKata Unik:", unique_words)
-        print("\nVektor Dokumen Uji:", vector1)
-        print("Vektor Dokumen Referensi:", vector2)
-
-        # Menampilkan frekuensi kata dalam format tabel
-        print("\nTabel Frekuensi Kata:")
-        print("-" * 50)
-        print(f"{'Kata':<15} {'Dokumen Uji':<12} {'Dokumen Referensi':<12}")
-        print("-" * 50)
-        for i, word in enumerate(unique_words):
-            print(f"{word:<15} {vector1[i]:<12} {vector2[i]:<12}")
-        print("-" * 50)
-
     # Menghitung similarity
-    return cosine_similarity(vector1, vector2)
+    similarity = cosine_similarity(vector1, vector2)
 
+    # Mendapatkan level plagiarisme
+    plagiarism_level = get_plagiarism_level(similarity)
 
-def main():
-    """
-    Fungsi utama untuk menjalankan program
-    """
-    print("=== Program Deteksi Plagiarisme PDF ===")
-    print("\nPastikan file PDF berada dalam folder 'documents'")
-
-    # Meminta input nama file dari pengguna
-    dok_uji = input("\nMasukkan nama file Dokumen Uji (contoh: dok1.pdf): ")
-    dok_query = input("Masukkan nama file Dokumen Referensi (contoh: dok2.pdf): ")
-
-    # Membuat path lengkap ke file
-    file1_path = os.path.join("documents", dok_uji)
-    file2_path = os.path.join("documents", dok_query)
-
-    # Memeriksa keberadaan file
-    if not os.path.exists(file1_path):
-        print(f"\nError: File {dok_uji} tidak ditemukan dalam folder documents!")
-        return
-
-    if not os.path.exists(file2_path):
-        print(f"\nError: File {dok_query} tidak ditemukan dalam folder documents!")
-        return
-
-    # Menghitung similarity
-    similarity = check_plagiarism(file1_path, file2_path, show_details=True)
-
-    print("\n" + "=" * 50)
-    if similarity is not None:
-        print("Hasil Deteksi Plagiarisme:")
-        print(f"Dokumen Uji\t\t: {dok_uji}")
-        print(f"Dokumen Referensi\t: {dok_query}")
-        print(f"Similarity\t\t: {similarity:.2%}")
-
-        # Memberikan interpretasi hasil
-        if similarity >= 0.80:
-            print("Interpretasi\t\t: Tingkat kemiripan sangat tinggi!")
-        elif similarity >= 0.60:
-            print("Interpretasi\t\t: Tingkat kemiripan tinggi")
-        elif similarity >= 0.40:
-            print("Interpretasi\t\t: Tingkat kemiripan sedang")
-        else:
-            print("Interpretasi\t\t: Tingkat kemiripan rendah")
-    else:
-        print("Terjadi error saat memproses dokumen")
-    print("=" * 50)
-
-
-if __name__ == "__main__":
-    main()
+    return {"similarity": similarity, "plagiarism_level": plagiarism_level}
